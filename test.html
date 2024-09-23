@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>셔플</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card {
+            width: 75px;
+            height: 105px;
+            position: relative;
+            margin: 0 -10px 10px; /* 카드 사이의 간격 조정, 좌우로 10px 겹치도록 설정 */
+            transition: transform 0.2s;
+            border: 4px solid white;
+            background-color: red;
+            display: inline-block;
+            z-index: 0;
+            flex-shrink: 0;
+        }
+        .first-card {
+            background-color: black; /* 검정색 배경 */
+		
+        }
+        .last-card {
+            margin-right: 30px; /* 마지막 카드에 추가 여백 */
+        }
+        .card:hover {
+            transform: translateY(-20px);
+            z-index: 10;
+        }
+        .select-button {
+            display: none;
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 255, 255, 0.8);
+            color: red;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+        .card:hover .select-button {
+            display: block;
+        }
+#cardContainer {
+    display: flex;
+    flex-wrap: nowrap; /* 줄 바꿈 없이 한 줄로 설정 */
+    justify-content: flex-start; /* 왼쪽 정렬 */
+    max-width: 100%;
+    overflow-x: auto; /* 수평 스크롤 가능 */
+    overflow-y: visible;
+    padding: 20px 0;
+}
+
+
+
+        body {
+            overflow-x: hidden;
+        }
+        .container {
+            position: relative;
+            padding-top: 40px; /* 마우스 오버 시 위로 올라가는 카드에 대한 여유 공간 */
+        }
+    </style>
+</head>
+<body class="text-center">
+    <div class="container mt-5">
+        <h1>셔플</h1>
+        <button id="shuffleBtn" class="btn btn-primary mb-3">셔플</button>
+        <div id="cardContainer"></div>
+    </div>
+
+    <script>
+        const cards = [
+            '카드1', '카드2', '카드3', '카드4', '카드5', '카드6', '카드7', '카드8', '카드9', '카드10',
+            '카드11', '카드12', '카드13', '카드14', '카드15', '카드16', '카드17', '카드18', '카드19', '카드20',
+            '카드21', '카드22', '카드23', '카드24', '카드25', '카드26', '카드27', '카드28', '카드29', '카드30',
+            '카드31', '카드32', '카드33', '카드34', '카드35', '카드36', '카드37', '카드38', '카드39', '카드40',
+            '카드41', '카드42', '카드43', '카드44', '카드45', '카드46', '카드47', '카드48', '카드49', '카드50',
+            '카드51', '카드52', '카드53', '카드54', '카드55', '카드56', '카드57', '카드58', '카드59', '카드60',
+            '카드61', '카드62', '카드63', '카드64', '카드65', '카드66', '카드67', '카드68', '카드69', '카드70',
+            '카드71', '카드72', '카드73', '카드74', '카드75', '카드76', '카드77', '카드78'
+        ];
+
+        const selectedCards = new Set();
+
+        document.getElementById('shuffleBtn').addEventListener('click', shuffleCards);
+
+	
+
+        function shuffleCards() {
+			 selectedCards.clear(); // 선택한 카드 초기화
+            const shuffledCards = cards.sort(() => 0.5 - Math.random());
+            const cardContainer = document.getElementById('cardContainer');
+            cardContainer.innerHTML = '';
+
+         
+
+
+			for (let i = 0; i < shuffledCards.length; i++) {
+				const card = document.createElement('div');
+				card.classList.add('card');
+				
+				// 카드 내용 설정
+				card.innerHTML = `
+					<button class="select-button" onclick="selectCard('${shuffledCards[i]}', this, card)">선택</button>
+				`;
+
+
+				 // selectCard 호출 시 card 요소도 참조
+					card.addEventListener('click', function() {
+						selectCard(shuffledCards[i], this.querySelector('.select-button'), card);
+					});
+
+				cardContainer.appendChild(card);
+			}
+        }
+
+      
+
+		function selectCard(cardName, button,card) {
+			if (selectedCards.size >= 3) {
+				alert('최대 3장까지 선택할 수 있습니다.');
+				return;
+			}
+			if (selectedCards.has(cardName)) {
+				alert('이미 선택된 카드입니다.');
+				return;
+			}
+			
+			selectedCards.add(cardName);
+			card.style.backgroundColor = 'gray'; // 선택한 카드 회색으로 변경
+			button.style.display = 'none'; // 선택 버튼 숨기기
+			alert(`${cardName} 선택되었습니다.`);
+		}
+		
+    </script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
